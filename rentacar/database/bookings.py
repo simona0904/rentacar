@@ -47,11 +47,18 @@ class BookingDatabase:
         if len(rows ) == 0:
             return False
         else:
-            return True   
+            return True 
 
-    def view_bookings(self) -> list[Booking]:
+    # metoda privata, care listeaza toate rezervarile pt un nr de inamtriculare sau daca nu primeste nr de inmatriculare
+    # listeaza toate rezervarile.
+    def _view_bookings(self, registration_nr: str | None) -> list[Booking]:
+        where = ""
+        params = ()
+        if registration_nr is not None:
+            where = "WHERE cars.registration_nr = ?"
+            params = (registration_nr,)
         cursor = self._connection.cursor()
-        result = cursor.execute("""
+        result = cursor.execute(f"""
         SELECT 
             bookings.id,
             bookings.start_date, 
@@ -65,7 +72,21 @@ class BookingDatabase:
             cars.registration_nr 
         FROM bookings 
         JOIN clients ON clients.id = bookings.client_id 
-        JOIN cars ON cars.id = bookings.car_id;""")
+        JOIN cars ON cars.id = bookings.car_id
+        {where};""", params)
         rows = result.fetchall()
-        return [Booking(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8],row[9]) for row in rows]          
+        return [Booking(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8],row[9]) for row in rows] 
+
+    # doua metode publice, una listeaza rezervarile pt un nr de inmatriculare si cealalta listeaza toate rez. existente.
+    def view_bookings_for_car_for_registration_nr(self, registration_nr: str) -> list[Booking]: 
+        return self._view_bookings(registration_nr)
+
+    def view_bookings(self) -> list[Booking]:
+        return self._view_bookings(None)
+        
+    def cancel_booking(self, booking_id: int):
+        cursor = self._connection.cursor()
+        cursor.execute("""DELETE FROM bookings WHERE id = ?;""", (booking_id,))
+        self._connection.commit()
+        
         

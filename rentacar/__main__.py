@@ -73,38 +73,46 @@ def main():
             except EmailExists:
                 print("Email already already exists.")   
             else:
-                print("Client successfully created.") 
-             
+                print("Client successfully created.")
+
+        # comanda care listeaza toti clientii     
         elif args.command == "list-clients":
             clients = client_database.list_clients()
             for client in clients:
                 print(client.id, client.first_name, client.last_name, client.address, client.phone, client.email)
 
+        # comanda care listeaza toate masinile
         elif args.command == "list-cars":
             cars = car_database.list_cars()
             for car in cars:
                 print(car.id, car.brand, car.model, car.year, car.doors, car.chassis_series, car.registration_nr)
- 
+
+        # comanda care face o rezevare
         elif args.command == "book-car": 
             if booking_database.is_car_booked(args.car_id, args.start_date, args.end_date):
                 print("Car unavailable.")
             else:
                 booking_create_data = BookingCreateData(args.start_date, args.end_date, args.client_id, args.car_id)
                 booking_database.book_car(booking_create_data)
-                print("Car booked.")    
+                print("Car booked.")
 
+        # comanda care listeaza toate rezervarile
         elif args.command == "view-bookings": 
             bookings = booking_database.view_bookings()
             for booking in bookings:
                 print(booking.id, booking.start_date, booking.end_date, booking.first_name, booking.last_name, booking.phone, 
                 booking.email, booking.brand, booking.model, booking.registration_nr)
 
-           
-
+        # comanda care listeaza toate rezervarile in fuctie de nr de inmatriculare
         elif args.command == "view-car-bookings": 
-            print("Lista rezervari")  
+            bookings = booking_database.view_bookings_for_car_for_registration_nr(args.registration_nr)
+            for booking in bookings:
+                print(booking.id, booking.start_date, booking.end_date, booking.first_name, booking.last_name, booking.phone, 
+                booking.email, booking.brand, booking.model, booking.registration_nr) 
+  
         elif args.command == "cancel-booking":  
-            print("Rezervare anulata")      
+            booking_database.cancel_booking(args.booking_id)
+            print("Booking cancelled.")      
 
 
 
