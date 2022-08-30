@@ -1,0 +1,62 @@
+Inchirieri auto - CLI
+Interfata:
+
+CLI
+Meniu
+
+    Aduga masina
+    Aduga client
+    Adauga rezervare
+    Vezi rezervari
+    Anuleaza rezervare
+
+Actiuni:
+
+    Adauga masina
+
+    vreau sa pot adauga o noua masina in baza de date
+    se citeste de la consola:
+        marca
+        model
+        an fabricatie
+        tip caroserie
+        serie sa sasiu
+        nr inmatriculare
+    se stocheaza in db
+
+    Adauga client
+
+    vreau sa pot adauga un nou client in db
+    se citeste de la tastatura
+        nume
+        prenume
+        cnp
+        adresa
+        nr tel
+        email
+
+    Adauga rezervare
+
+    vreau sa pot adauga o rezervare pe o masina pentru o anumita perioada
+    masina se alege pe baza de id
+    clientul se alege pe baza de id
+    perioada se introduce de la tastatura
+    rezervarea se salveaza in db
+    daca exista o rezervare pe masina aleasa in perioada aleasa, trebuie emisa o erorare
+
+    Vezi rezervari
+
+    vreau sa pot vedea o lista cu toate rezervarile
+    vreau sa pot vedea o lista cu rezervarile pentru o masina, aleasa dupa nr de inmatriculare
+
+    Anuleaza rezervarea
+
+    vreau sa pot anula (sa o marchez anulata) o rezervare
+    deci masina devine disponibila
+
+Cerinte non-functionale
+
+    Logging
+    Trebuie folosit modulul argparse, pt. argumente
+    Tratarea erorilor cu strictete.
+    datele sunt stocate intr-o baza de dare SQLite
